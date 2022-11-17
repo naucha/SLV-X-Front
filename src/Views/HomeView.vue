@@ -1,3 +1,7 @@
 <template>
-  <h1>Home View</h1>
+  <MobilesList />
 </template>
+
+<script lang="ts" setup>
+import MobilesList from "../components/MobilesList.vue";
+</script>
