@@ -1,35 +1,48 @@
-<template>
-  <h1>Hola</h1>
-  <ul v-for="mobile in mobiles">
-    <li>
-      <span>{{ mobile["brand"] }} </span>
+<script lang="ts" setup>
+import { onMounted, Ref, ref } from "vue";
+import Mobile from "./Mobile.vue";
+import { IMobile } from "../types/types";
+import { getMobiles } from "../api/mobileService";
 
-      <span>{{ mobile["model"] }}</span>
-    </li>
-  </ul>
+const mobiles: Ref<IMobile[]> = ref([]);
+
+onMounted(async () => {
+  mobiles.value = await getMobiles();
+});
+</script>
+
+<template>
+  <h1>Mobiles Table</h1>
+  <div>
+    <table>
+      <tr>
+        <th scope="col">Brand</th>
+        <th scope="col">Model</th>
+        <th scope="col">Rate</th>
+      </tr>
+    </table>
+    <table v-for="mobile in mobiles">
+      <Mobile :brand="mobile.brand" :model="mobile.model" />
+    </table>
+  </div>
 </template>
 
-<script lang="ts">
-import axios from "axios";
-
-export default {
-  name: "MobilesList",
-  data() {
-    return {
-      mobiles: [],
-    };
-  },
-
-  methods: {
-    async getMobiles() {
-      let url = `${import.meta.env.VITE_API_URL}`;
-      let response = await axios.get(`${url}api/mobiles`);
-      this.mobiles = response.data;
-    },
-  },
-
-  created() {
-    this.getMobiles();
-  },
-};
-</script>
+<style lang="css" scoped>
+div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+th {
+  padding: 6px;
+  width: 110px;
+  height: 30px;
+}
+table {
+  border: 1px solid rgb(200, 200, 200);
+  margin: 6px;
+  letter-spacing: 1px;
+  font-family: sans-serif;
+  font-size: 0.8rem;
+}
+</style>
