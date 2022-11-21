@@ -1,13 +1,14 @@
 <script lang="ts" setup>
-import { onMounted, Ref, ref } from "vue";
+import { onMounted } from "vue";
 import Mobile from "./Mobile.vue";
-import { IMobile } from "../types/types";
-import { getMobiles } from "../api/mobileService";
 
-const mobiles: Ref<IMobile[]> = ref([]);
+import { mobileStore } from "../store/mobilesStore";
+import { computed } from "@vue/reactivity";
+
+const mobiles = computed(() => mobileStore.mobileList);
 
 onMounted(async () => {
-  mobiles.value = await getMobiles();
+  mobileStore.get();
 });
 </script>
 
