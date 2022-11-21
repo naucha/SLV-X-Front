@@ -10,6 +10,10 @@ const mobiles = computed(() => mobileStore.mobileList);
 onMounted(async () => {
   mobileStore.get();
 });
+
+const handleDelete = (id: number) => {
+  mobileStore.delete(id);
+};
 </script>
 
 <template>
@@ -23,7 +27,8 @@ onMounted(async () => {
       </tr>
     </table>
     <table v-for="mobile in mobiles">
-      <Mobile :brand="mobile.brand" :model="mobile.model" />
+      <Mobile :brand="mobile.brand" :model="mobile.model" :key="mobile.id" />
+      <button @click="handleDelete(mobile.id)">Delete</button>
     </table>
   </div>
 </template>
