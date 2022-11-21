@@ -16,3 +16,17 @@ export const addMobile = async (mobile: any): Promise<void> => {
     console.log("not added");
   }
 };
+
+export const getMobile = async (id: number): Promise<IMobile> => {
+  return await axios.get(`${url}api/mobiles/${id}`).then((response) => {
+    return response.data;
+  });
+};
+
+export const deleteOne = async (id: number) => {
+  try {
+    const response = await axios.delete(`${url}api/mobiles/${id}`);
+  } catch (error) {
+    console.log("failed to delete");
+  }
+};
