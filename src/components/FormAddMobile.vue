@@ -11,8 +11,14 @@ const saveNewMobile = () => {
     brand: newMobile.value.brand,
   };
 
-  mobileStore.add(mobile);
-  newMobile.value = { model: "", brand: "" };
+  if (mobile.brand !== "" && mobile.model !== "") {
+    mobileStore.add(mobile);
+    newMobile.value = { model: "", brand: "" };
+  } else {
+    console.log("nothing to create");
+  }
+
+  return null;
 };
 </script>
 
