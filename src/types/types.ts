@@ -10,3 +10,11 @@ export interface IMobileRequest {
   brand: string;
   model: string;
 }
+
+export interface IMobileUpdate {
+  id: number;
+  brand: string;
+  model: string;
+  created_at?: string;
+  upload_at?: string;
+}
