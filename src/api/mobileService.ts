@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IMobile } from "../types/types";
+import { IMobile, IMobileRequest, IMobileUpdate } from "../types/types";
 
 const url = `${import.meta.env.VITE_API_URL}`;
 
@@ -9,7 +9,7 @@ export const getMobiles = async (): Promise<IMobile[]> => {
   });
 };
 
-export const addMobile = async (mobile: any): Promise<void> => {
+export const addMobile = async (mobile: IMobileRequest): Promise<void> => {
   try {
     const { data } = await axios.post(`${url}api/mobiles`, mobile);
   } catch (error) {
@@ -28,5 +28,18 @@ export const deleteOne = async (id: number) => {
     const response = await axios.delete(`${url}api/mobiles/${id}`);
   } catch (error) {
     console.log("failed to delete");
+  }
+};
+
+export const updateMobile = async (mobile: IMobileUpdate) => {
+  const { id, brand, model } = mobile;
+  try {
+    await axios.put(`${url}api/mobiles/${id}`, {
+      id,
+      brand,
+      model,
+    });
+  } catch (error) {
+    console.log("failed to update");
   }
 };
