@@ -1,7 +1,8 @@
 import axios from "axios";
+
 import { IMobile, IMobileRequest, IMobileUpdate } from "../types/types";
 
-const url = `${import.meta.env.VITE_API_URL}`;
+const url: string = `${import.meta.env.VITE_API_URL}`;
 
 export const getMobiles = async (): Promise<IMobile[]> => {
   return await axios.get(`${url}api/mobiles`).then((response) => {
@@ -42,4 +43,10 @@ export const updateMobile = async (mobile: IMobileUpdate) => {
   } catch (error) {
     console.log("failed to update");
   }
+};
+
+export const getMobileRatingsCount = async (id: number): Promise<any> => {
+  return await axios.get(`${url}api/mobiles/rating/${id}`).then((response) => {
+    return response.data;
+  });
 };
