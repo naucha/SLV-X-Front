@@ -5,38 +5,11 @@ import { ref } from "vue";
 import { mobileStore } from "../store/mobilesStore";
 import { computed } from "@vue/reactivity";
 import { IMobileUpdate } from "../types/types";
+
 const mobiles = computed(() => mobileStore.mobileList);
 
 onMounted(async () => {
-  mobileStore.get();
-});
-
-const handleDelete = (id: number) => {
-  mobileStore.delete(id);
-};
-
-let idToUpdate = 0;
-let brandToUpdate = "";
-let modelToUpdate = "";
-
-const handleUpdate = (mobile: IMobileUpdate) => {
-  mobileStore.showUpdate = true;
-  const { id, brand, model } = mobile;
-
-  idToUpdate = id;
-  brandToUpdate = brand;
-  modelToUpdate = model;
-
-  updateMobile.value.brand = brandToUpdate;
-  updateMobile.value.model = modelToUpdate;
-
-  return { idToUpdate, brandToUpdate, modelToUpdate };
-};
-
-const updateMobile = ref({
-  id: idToUpdate,
-  brand: brandToUpdate,
-  model: modelToUpdate,
+  await mobileStore.get();
 });
 
 const saveUpdateMobile = () => {
@@ -60,37 +33,69 @@ const saveUpdateMobile = () => {
   };
   mobileStore.showUpdate = false;
 };
+
+const handleDelete = (id: number) => {
+  mobileStore.delete(id);
+};
+
+let idToUpdate = 0;
+let brandToUpdate = "";
+let modelToUpdate = "";
+
+const updateMobile = ref({
+  id: idToUpdate,
+  brand: brandToUpdate,
+  model: modelToUpdate,
+});
+
+const handleUpdate = (mobile: IMobileUpdate) => {
+  mobileStore.showUpdate = true;
+  const { id, brand, model } = mobile;
+  idToUpdate = id;
+  brandToUpdate = brand;
+  modelToUpdate = model;
+
+  updateMobile.value.brand = brandToUpdate;
+  updateMobile.value.model = modelToUpdate;
+
+  return { idToUpdate, brandToUpdate, modelToUpdate };
+};
 </script>
 
 <template>
   <h1>Mobiles Table</h1>
+  <table>
+    <tr>
+      <th scope="col">Brand</th>
+      <th scope="col">Model</th>
+    </tr>
+  </table>
   <div>
-    <table>
-      <tr>
-        <th scope="col">Brand</th>
-        <th scope="col">Model</th>
-        <th scope="col">Rate</th>
-      </tr>
-    </table>
     <table v-for="mobile in mobiles">
-      <Mobile :brand="mobile.brand" :model="mobile.model" :key="mobile.id" />
+      <Mobile
+        :brand="mobile.brand"
+        :model="mobile.model"
+        :id="mobile.id"
+        :key="mobile.id"
+      />
+
       <button @click="handleDelete(mobile.id)">Delete</button>
       <button @click="handleUpdate(mobile)">Edit</button>
     </table>
-    <form v-if="mobileStore.showUpdate" @submit.prevent="saveUpdateMobile">
-      <input
-        type="text"
-        placeholder="Insert brand"
-        v-model="updateMobile.brand"
-      />
-      <input
-        type="text"
-        placeholder="Insert model"
-        v-model="updateMobile.model"
-      />
-      <button type="submit">Update MOBILE</button>
-    </form>
   </div>
+  <form v-if="mobileStore.showUpdate" @submit.prevent="saveUpdateMobile">
+    <input
+      type="text"
+      placeholder="Insert brand"
+      v-model="updateMobile.brand"
+    />
+    <input
+      type="text"
+      placeholder="Insert model"
+      v-model="updateMobile.model"
+    />
+    <button type="submit">Update MOBILE</button>
+  </form>
 </template>
 
 <style lang="css" scoped>
